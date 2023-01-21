@@ -5,96 +5,121 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: brahim <brahim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/08 03:12:20 by brahim            #+#    #+#             */
-/*   Updated: 2023/01/08 14:04:48 by brahim           ###   ########.fr       */
+/*   Created: 2023/01/17 13:43:12 by brahim            #+#    #+#             */
+/*   Updated: 2023/01/20 18:53:53 by brahim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	ft_exit(t_data *map)
+t_map	*get_map_data(char	*name)
 {
-	free (map->map);
-	(void)map;
-	exit (EXIT_SUCCESS);
-}
+	int			fd;
+	int			i;
+	char		*line;
+	static char	*l;
+	t_map		*mapdata;
 
-t_data	put_data(char	**map)
-{
-	int		i;
-	t_data	mapd;
-
+	fd = open(name, O_RDONLY);
+	mapdata = malloc(sizeof(t_map));
+	line = get_next_line(fd);
+	if (!line)
+		text_to_display("Error\n\033[1;31mFile empty !\n", 1);
+	mapdata->w = (int)ft_strlen(line) - 1;
 	i = 0;
-	while (map[i])
-		i++;
-	mapd.map = map;
-	mapd.p_pos[0] = 0;
-	mapd.p_pos[1] = 0;
-	mapd.steps = 0;
-	mapd.mlx = mlx_init();
-	mapd.w = ft_strlen(map[0]);
-	mapd.h = i;
-	mapd.win = mlx_new_window(mapd.mlx, mapd.w * 50, mapd.h * 50, "so_long");
-	mapd.wl = mlx_xpm_file_to_image(mapd.mlx, WALL, &mapd.wi, &mapd.hi);
-	mapd.e = mlx_xpm_file_to_image(mapd.mlx, EMPTY, &mapd.wi, &mapd.hi);
-	mapd.p = mlx_xpm_file_to_image(mapd.mlx, PLAYER, &mapd.wi, &mapd.hi);
-	mapd.c = mlx_xpm_file_to_image(mapd.mlx, COLLECT, &mapd.wi, &mapd.hi);
-	mapd.ex = mlx_xpm_file_to_image(mapd.mlx, EXIT, &mapd.wi, &mapd.hi);
-	if (!mapd.wl || !mapd.e || !mapd.p || !mapd.c || !mapd.ex)
+	while (line)
 	{
-		write(2, "Invalid xpm file !\n", 19);
-		exit(EXIT_FAILURE);
+		l = ft_join(l, line);
+		line = get_next_line(fd);
+		i++;
 	}
-	return (mapd);
+	mapdata->map = ft_split(l, '\n');
+	mapdata->copy_e = ft_split(l, '\n');
+	mapdata->copy_c = ft_split(l, '\n');
+	mapdata->h = i;
+	return (mapdata);
 }
 
-int	create_map(t_data *m)
+void	get_map_data2(t_map *map)
+{
+	int			i;
+	int			j;
+
+	map->coins = 0;
+	map->steps = 1;
+	i = -1;
+	while (map->map[++i])
+	{
+		j = -1;
+		while (map->map[i][++j])
+		{
+			if (map->map[i][j] == 'C')
+				map->coins++;
+			else if (map->map[i][j] == 'P')
+			{
+				map->x = i;
+				map->y = j;
+			}
+		}
+	}
+}
+
+t_data	*put_data(char	*name)
+{
+	t_data	*d;
+
+	d = malloc(sizeof(t_data));
+	d->m = get_map_data(name);
+	get_map_data2(d->m);
+	check_map(d->m);
+	d->mlx = mlx_init();
+	d->win = mlx_new_window(d->mlx, d->m->w * 50, d->m->h * 50, "so_long");
+	get_images(d);
+	return (d);
+}
+
+void	create_map(t_data *d)
 {
 	int	i;
 	int	j;
 
-	j = -1;
-	while (m->map[++j])
+	i = -1;
+	if (!d->mlx && !d->win)
 	{
-		i = -1;
-		while (m->map[j][++i])
+			d->mlx = mlx_init();
+		d->win = mlx_new_window(d->mlx, d->m->w * 50, d->m->h * 50, "so_long");
+	}
+	while (d->m->map[++i])
+	{
+		j = -1;
+		while (d->m->map[i][++j])
 		{
-			mlx_put_image_to_window(m->mlx, m->win, m->e, i * 50, j * 50);
-			if (m->map[j][i] == '1')
-				mlx_put_image_to_window(m->mlx, m->win, m->wl, i * 50, j * 50);
-			else if (m->map[j][i] == 'C')
-				mlx_put_image_to_window(m->mlx, m->win, m->c, i * 50, j * 50);
-			else if (m->map[j][i] == 'P')
-			{
-				mlx_put_image_to_window(m->mlx, m->win, m->p, i * 50, j * 50);
-				m->p_pos[0] = i;
-				m->p_pos[1] = j;
-			}
-			else if (m->map[j][i] == 'E')
-				mlx_put_image_to_window(m->mlx, m->win, m->ex, i * 50, j * 50);
+			mlx_put_image_to_window(d->mlx, d->win, d->e, j * 50, i * 50);
+			if (d->m->map[i][j] == '1')
+				mlx_put_image_to_window(d->mlx, d->win, d->wl, j * 50, i * 50);
+			else if (d->m->map[i][j] == 'C')
+				mlx_put_image_to_window(d->mlx, d->win, d->c, j * 50, i * 50);
+			else if (d->m->map[i][j] == 'P')
+				mlx_put_image_to_window(d->mlx, d->win, d->pl, j * 50, i * 50);
+			else if (d->m->map[i][j] == 'E')
+				mlx_put_image_to_window(d->mlx, d->win, d->ex, j * 50, i * 50);
 		}
 	}
-	return (0);
 }
 
 int	main(int argc, char **argv)
 {
-	char	**map;
-	t_data	map_d;
+	t_data	*data;
 
 	if (argc == 2)
 	{
-		map = check_map(argv[1]);
-		map_d = put_data(map);
-		create_map(&map_d);
-		mlx_hook(map_d.win, 17, 0, ft_exit, &map_d);
-		mlx_key_hook(map_d.win, key_press, &map_d);
-		mlx_loop_hook(map_d.mlx, create_map, &map_d);
-		mlx_loop(map_d.mlx);
+		check_extension(argv[1]);
+		data = put_data(argv[1]);
+		create_map(data);
+		mlx_hook(data->win, 17, 0, ft_exit, data);
+		mlx_key_hook(data->win, key_press, data);
+		mlx_loop(data->mlx);
 	}
 	else
-	{
-		write(2, "Invalid number of arguments !", 29);
-		exit (EXIT_FAILURE);
-	}
+		text_to_display("Error\n\033[1;31mUsage : ./so_long [MAP]\033[0m\n", 1);
 }

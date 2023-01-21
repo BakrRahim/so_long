@@ -6,7 +6,7 @@
 /*   By: brahim <brahim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 17:32:52 by brahim            #+#    #+#             */
-/*   Updated: 2022/11/10 20:59:20 by brahim           ###   ########.fr       */
+/*   Updated: 2023/01/20 21:05:44 by brahim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*read_and_cat(int fd, char *left_line)
 	ssize_t	bytes;
 
 	bytes = 1;
+	if (BUFFER_SIZE == 2147483647)
+		return (NULL);
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (NULL);
@@ -99,7 +101,10 @@ char	*get_next_line(int fd)
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
+	{
+		ft_printf("Error\n\033[1;31mFile not found !\033[0m\n");
+		exit (EXIT_FAILURE);
+	}
 	left_line = read_and_cat(fd, left_line);
 	if (!left_line)
 		return (NULL);

@@ -1,24 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   printchr.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: brahim <brahim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/07 08:03:15 by brahim            #+#    #+#             */
-/*   Updated: 2023/01/08 14:03:40 by brahim           ###   ########.fr       */
+/*   Created: 2022/11/11 17:21:14 by brahim            #+#    #+#             */
+/*   Updated: 2022/11/11 18:08:56 by brahim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "ft_printf.h"
 
-void	*ft_calloc(size_t count, size_t size)
+int	printchr(int c)
 {
-	char	*ret;
-
-	ret = malloc(size * count);
-	if (!ret)
-		return (NULL);
-	ft_bzero(ret, size * count);
-	return (ret);
+	write (1, &c, 1);
+	return (1);
 }

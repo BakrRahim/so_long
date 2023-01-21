@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: brahim <brahim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/05 14:20:39 by brahim            #+#    #+#             */
-/*   Updated: 2023/01/17 13:56:01 by brahim           ###   ########.fr       */
+/*   Created: 2022/11/09 15:48:37 by brahim            #+#    #+#             */
+/*   Updated: 2022/11/12 19:24:35 by brahim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	size_t	i;
+# include <unistd.h>
+# include <string.h>
+# include <stdarg.h>
+# include <limits.h>
 
-	i = 0;
-	while (i < n)
-	{
-		if (s1[i] != s2[i] || s1[i] == '\0' || s2[i] == '\0')
-			return (((unsigned char *)s1)[i] - ((unsigned char *)s2)[i]);
-		i++;
-	}
-	return (0);
-}
+int	ft_printf(const char *format, ...);
+int	printchr(int c);
+int	printstr(char *str);
+int	printhex(unsigned int n);
+int	printhxup(unsigned int n);
+int	printnum(int num);
+int	printuns(unsigned int n);
+int	printprcnt(void);
+int	printaddr(unsigned long n);
+
+#endif

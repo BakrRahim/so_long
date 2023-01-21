@@ -1,27 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   printaddr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: brahim <brahim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/05 14:20:39 by brahim            #+#    #+#             */
-/*   Updated: 2023/01/17 13:56:01 by brahim           ###   ########.fr       */
+/*   Created: 2022/11/12 19:23:22 by brahim            #+#    #+#             */
+/*   Updated: 2022/11/12 19:34:41 by brahim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "ft_printf.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int	printaddr(unsigned long n)
 {
-	size_t	i;
+	int	ret;
 
-	i = 0;
-	while (i < n)
+	ret = 0;
+	if (n >= 16)
 	{
-		if (s1[i] != s2[i] || s1[i] == '\0' || s2[i] == '\0')
-			return (((unsigned char *)s1)[i] - ((unsigned char *)s2)[i]);
-		i++;
+		ret += printaddr(n / 16);
+		ret += printaddr(n % 16);
 	}
-	return (0);
+	else if (n <= 9)
+	{
+		ret += printchr(n + 48);
+	}
+	else
+		ret += printchr(n + 87);
+	return (ret);
 }

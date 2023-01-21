@@ -6,7 +6,7 @@
 /*   By: brahim <brahim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 14:43:27 by brahim            #+#    #+#             */
-/*   Updated: 2022/12/08 15:50:56 by brahim           ###   ########.fr       */
+/*   Updated: 2023/01/18 02:20:08 by brahim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ char	*ft_strchr(const char *s, int c)
 	return (ret);
 }
 
-int	ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	if (!str)

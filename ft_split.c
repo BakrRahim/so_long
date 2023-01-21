@@ -6,7 +6,7 @@
 /*   By: brahim <brahim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 21:36:45 by brahim            #+#    #+#             */
-/*   Updated: 2023/01/06 17:27:14 by brahim           ###   ########.fr       */
+/*   Updated: 2023/01/18 19:28:40 by brahim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ static int	wc(char	const *s, char c)
 	int	count;
 	int	j;
 
-	i = 0;
+	i = -1;
 	count = 0;
 	j = 0;
-	while (s[i] != '\0')
+	while (s[++i] != '\0')
 	{
+		if ((i == 0 && s[i] == c) || (s[i] == c && s[i + 1] == c))
+			text_to_display("Error\n\033[1;31mInvalid map format !\033[0m\n", 1);
 		if (s[i] == c && j == 1)
 			j = 0;
 		else if (s[i] != c && j == 0)
@@ -30,8 +32,9 @@ static int	wc(char	const *s, char c)
 			count++;
 			j = 1;
 		}
-		i++;
 	}
+	if ((s[i] == '\0' && s[i - 1] == c))
+		text_to_display("Error\n\033[1;31mInvalid map format !\033[0m\n", 1);
 	return (count);
 }
 

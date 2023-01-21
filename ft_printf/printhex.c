@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bzero.c                                         :+:      :+:    :+:   */
+/*   printhex.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: brahim <brahim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/05 14:18:05 by brahim            #+#    #+#             */
-/*   Updated: 2023/01/06 17:30:53 by brahim           ###   ########.fr       */
+/*   Created: 2022/11/11 17:37:37 by brahim            #+#    #+#             */
+/*   Updated: 2022/11/12 19:34:11 by brahim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "ft_printf.h"
 
-void	ft_bzero(void *s, size_t n)
+int	printhex(unsigned int n)
 {
-	size_t	i;
+	int	ret;
 
-	i = 0;
-	while (i < n)
-		((char *)s)[i++] = '\0';
+	ret = 0;
+	if (n >= 16)
+	{
+		ret += printhex(n / 16);
+		ret += printhex(n % 16);
+	}
+	else if (n <= 9)
+	{
+		ret += printchr(n + 48);
+	}
+	else
+		ret += printchr(n + 87);
+	return (ret);
 }

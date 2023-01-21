@@ -1,14 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_path.c                                       :+:      :+:    :+:   */
+/*   printuns.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: brahim <brahim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/08 18:09:51 by brahim            #+#    #+#             */
-/*   Updated: 2023/01/08 18:10:02 by brahim           ###   ########.fr       */
+/*   Created: 2022/11/11 23:34:51 by brahim            #+#    #+#             */
+/*   Updated: 2022/11/12 19:32:14 by brahim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "ft_printf.h"
 
+int	printuns(unsigned int n)
+{
+	int	ret;
+
+	ret = 0;
+	if (n >= 10)
+	{
+		ret += printuns(n / 10);
+		ret += printuns(n % 10);
+	}
+	else
+		ret += printchr(n + 48);
+	return (ret);
+}

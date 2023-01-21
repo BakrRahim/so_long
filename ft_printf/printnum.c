@@ -1,27 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   printnum.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: brahim <brahim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/05 14:20:39 by brahim            #+#    #+#             */
-/*   Updated: 2023/01/17 13:56:01 by brahim           ###   ########.fr       */
+/*   Created: 2022/11/11 17:37:43 by brahim            #+#    #+#             */
+/*   Updated: 2022/11/11 23:42:09 by brahim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "ft_printf.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int	printnum(int n)
 {
-	size_t	i;
+	int	ret;
 
-	i = 0;
-	while (i < n)
+	ret = 0;
+	if (n == -2147483648)
 	{
-		if (s1[i] != s2[i] || s1[i] == '\0' || s2[i] == '\0')
-			return (((unsigned char *)s1)[i] - ((unsigned char *)s2)[i]);
-		i++;
+		write (1, "-2147483648", 11);
+		return (11);
 	}
-	return (0);
+	if (n >= 10)
+	{
+		ret += printnum(n / 10);
+		ret += printnum(n % 10);
+	}
+	else if (n < 0)
+	{
+		ret += printchr('-');
+		ret += printnum(n * (-1));
+	}
+	else
+		ret += printchr(n + 48);
+	return (ret);
 }

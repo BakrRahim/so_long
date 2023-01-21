@@ -1,33 +1,38 @@
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit
+CFLAGS = -Wall -Wextra -Werror
 
-SRCS = so_long.c \
-		so_long_utils.c \
-		check_map.c \
-		move_player.c \
-		gnl/get_next_line.c \
-		gnl/get_next_line_utils.c \
-		libft/libft.a \
+MLX = -lmlx -framework OpenGL -framework AppKit
 
 NAME = so_long
 
-LIBFT = libft/libft.a
+SRCS = ft_check_format.c \
+	ft_check_path.c \
+	ft_move.c \
+	ft_split.c \
+	ft_strncmp.c \
+	so_long_utils.c \
+	so_long_utils2.c \
+	so_long.c \
+	gnl/get_next_line.c \
+	gnl/get_next_line_utils.c \
+	ft_printf/libftprintf.a \
 
-RM = rm -f
+PRINTF = ft_printf
 
 all : $(NAME)
 
-$(NAME) : $(LIBFT)
-	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
+$(NAME) :
+	make -C $(PRINTF)
+	$(CC) $(SRCS) $(CFLAGS) $(MLX) -o $(NAME)
 
-$(LIBFT) :
-	make -f libft/Makefile
+clean :
+	make clean -C $(PRINTF)
 
-clean : 
-	make clean -f libft/Makefile
-
-fclean : clean
-	$(RM) $(NAME)
+fclean :
+	make fclean -C $(PRINTF)
+	rm -rf $(NAME)
 
 re : fclean all
+
+.PHONY : all clean fclean re

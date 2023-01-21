@@ -1,6 +1,0 @@
-1- Create map based on a variable width and length ---- done
-2- Check the path in the map if valid or not 
-3- free all leaked memory ---- done
-4- Print number of steps ---- done
-5- exit when all collectibles are collected and player goes to the exit
-6- Create makefile
